@@ -18,7 +18,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /[\.js]$/,
+        test: /\.(js|jsx)$/,
         exclude: /node_module/,
         use: {
           loader: 'babel-loader',
@@ -35,6 +35,8 @@ module.exports = {
                   shippedProposals: true,
                 },
               ],
+              '@babel/preset-react',
+              '@babel/preset-typescript',
             ],
           },
         },
