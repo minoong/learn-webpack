@@ -1,13 +1,14 @@
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const TerserPlugin = require('terser-webpack-plugin');
+// const TerserPlugin = require('terser-webpack-plugin');
 const path = require('path');
 
 module.exports = {
   mode: 'development',
   entry: {
-    app: './src/index.ts',
+    app: './src/index.tsx',
+    vendors: ['moment', 'lodash'],
   },
   output: {
     filename: '[name].bundle.js',
@@ -18,7 +19,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(js|jsx)$/,
+        test: /\.(js|jsx|ts|tsx)$/,
         exclude: /node_module/,
         use: {
           loader: 'babel-loader',
@@ -46,19 +47,36 @@ module.exports = {
         use: 'ts-loader',
         exclude: /node_modules/,
       },
+      {
+        test: /\.css$/i,
+        use: ["style-loader", "css-loader"],
+      },
     ],
   },
-  plugins: [new webpack.ProgressPlugin(), new CleanWebpackPlugin(), new HtmlWebpackPlugin({ title: 'Development' })],
-  optimization: {
-    minimizer: [
-      new TerserPlugin({
-        parallel: true,
-        terserOptions: {
-          // https://github.com/webpack-contrib/terser-webpack-plugin#terseroptions
-        },
-      }),
-    ],
-  },
+  plugins: [new webpack.ProgressPlugin(), new CleanWebpackPlugin(), new HtmlWebpackPlugin({ title: 'Development'  })],
+  // optimization: {
+  //   minimize: true,
+  //   // minimizer: [
+  //   //   new TerserPlugin({
+  //   //     terserOptions: {
+  //   //       ecma: undefined,
+  //   //       parse: {},
+  //   //       compress: {},
+  //   //       mangle: true, // Note `mangle.properties` is `false` by default.
+  //   //       module: false,
+  //   //       // Deprecated
+  //   //       output: null,
+  //   //       format: null,
+  //   //       toplevel: false,
+  //   //       nameCache: null,
+  //   //       ie8: true,
+  //   //       keep_classnames: undefined,
+  //   //       keep_fnames: false,
+  //   //       safari10: false,
+  //   //     },
+  //   //   }),
+  //   // ],
+  // },
   devServer: {
     contentBase: './dist',
   },
